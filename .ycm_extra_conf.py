@@ -88,9 +88,9 @@ flags = [
 '-I',
 '/usr/include/SDL2',
 '-I',
-'/home/diplay/Загрузки/oxygine-framework/oxygine/third_party/linux/pthreads/include',
+'/home/diplay/projects/oxygine-framework/oxygine/third_party/linux/pthreads/include',
 '-I',
-'/home/diplay/Загрузки/oxygine-framework/oxygine/third_party/linux/zlib'
+'/home/diplay/projects/oxygine-framework/oxygine/third_party/linux/zlib'
 ]
 
 # Set this to the absolute path to the folder (NOT the file!) containing the

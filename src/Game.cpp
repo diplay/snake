@@ -3,6 +3,7 @@
 Game::Game()
 {
 	menu = new Menu();
+	menu->setPosition(getStage()->getSize() / 2);
 	menu->addItem("New Game", CLOSURE(this, &Game::onNewGame));
 	menu->addItem("Exit", CLOSURE(this, &Game::onExit));
 }

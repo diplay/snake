@@ -38,6 +38,11 @@ void Scene::nextTact(Event* e)
 	}
 	if(!bonus)
 		genBonus();
+	if(energy < 0)
+	{
+		gameOver();
+		return;
+	}
 	spTween t = addTween(TweenDummy(), duration);
 	t->setDoneCallback(CLOSURE(this, &Scene::nextTact));
 	scoreboard->setScore(score, energy);
@@ -67,4 +72,10 @@ Scene::Scene()
 	genBonus();
 	spTween t = addTween(TweenDummy(), duration);
 	t->setDoneCallback(CLOSURE(this, &Scene::nextTact));
+}
+
+void Scene::gameOver()
+{
+	GameOverEvent ev(score);
+	dispatchEvent(&ev);
 }

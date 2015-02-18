@@ -11,8 +11,12 @@ Menu::Menu()
 void Menu::addItem(std::string text, EventCallback onClick)
 {
 	spTextField item = new TextField();
+	int position = 0;
+	for(auto it : items)
+		position = it->getY();
+	position += style.font->getSize();
 	addChild(item);
-	item->setPosition(0, 0);
+	item->setPosition(0, position);
 	item->setText(text);
 	item->setStyle(style);
 	item->addEventListener(TouchEvent::CLICK, onClick);

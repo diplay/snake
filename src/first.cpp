@@ -1,5 +1,5 @@
 #include "oxygine-framework.h"
-#include "Scene.h"
+#include "Game.h"
 
 using namespace oxygine;
 
@@ -10,10 +10,9 @@ void preinit(){}
 void init()
 {
 	resources.loadXML("data/res.xml");
-	spScene actor = new Scene;
-
+	Game* g = new Game();
 	//and add it to Stage as child
-	getStage()->addChild(actor);
+	g->showMenu();
 }
 
 

@@ -2,6 +2,16 @@
 #include "Bonus.h"
 #include "Scoreboard.h"
 
+class GameOverEvent : public Event
+{
+public:
+	enum {EVENT = eventID('G', 'm', 'O', 'r')};
+
+	int score;
+
+	GameOverEvent(int score): Event(EVENT), score(score){}
+};
+
 class Scene : public Actor
 {
 private:
@@ -16,6 +26,7 @@ private:
 	void nextTact(Event* e);
 	BONUS_TYPE getRandomBonus();
 	void genBonus();
+	void gameOver();
 
 public:
 	Scene();

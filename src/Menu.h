@@ -12,3 +12,5 @@ public:
 	Menu();
 	void addItem(std::string text, EventCallback onClick);
 };
+
+typedef oxygine::intrusive_ptr<Menu> spMenu;

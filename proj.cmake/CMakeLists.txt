@@ -12,3 +12,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 add_executable(snake  ${SRCFILES})
 
 target_link_libraries(snake ${OXYGINE_CORE_LIBS})
+
+add_custom_command(TARGET snake PRE_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                       ../data $<TARGET_FILE_DIR:snake>)

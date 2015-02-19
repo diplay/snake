@@ -9,7 +9,7 @@ void preinit(){}
 
 void init()
 {
-	resources.loadXML("data/res.xml");
+	resources.loadXML("res.xml");
 	Game* g = new Game();
 	//and add it to Stage as child
 	g->showMenu();

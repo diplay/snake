@@ -51,6 +51,40 @@ void Snake::keyPressed(Event* event)
 		dir = newdir;
 }
 
+void Snake::swipe(Event* event)
+{
+	TouchEvent* e = (TouchEvent*)event;
+	static bool pressed = false;
+	static Vector2 origin(0, 0);
+	static const Vector2 up(0, -1), right(1, 0), down(0, 1), left(-1, 0);
+	switch (e->type)
+	{
+	case TouchEvent::TOUCH_DOWN:
+		pressed = true;
+		origin = e->position;
+		break;
+	case TouchEvent::TOUCH_UP:
+		if(pressed)
+		{
+			Vector2 d = e->position - origin;
+			d.normalize();
+			float ratings[4];
+			ratings[UP] = d.dot(up);
+			ratings[RIGHT] = d.dot(right);
+			ratings[DOWN] = d.dot(down);
+			ratings[LEFT] = d.dot(left);
+			DIRECTION newdir = (DIRECTION)0;
+			for(int i = 1; i < 4; i++)
+				if(ratings[i] > ratings[newdir])
+					newdir = (DIRECTION)i;
+			if(abs(newdir - dir) != 2)
+				dir = newdir;
+		}
+		pressed = false;
+		break;
+	}
+}
+
 void Snake::nextTact(STATUS s)
 {
 	Vector2 pos = snakeBody.front()->getPosition();
@@ -109,4 +143,6 @@ Snake::Snake(Vector2 pos)
 {
 	initSnake(pos);
 	getStage()->addEventListener(KeyEvent::KEY_DOWN, CLOSURE(this, &Snake::keyPressed));
+	getStage()->addEventListener(TouchEvent::TOUCH_UP, CLOSURE(this, &Snake::swipe));
+	getStage()->addEventListener(TouchEvent::TOUCH_DOWN, CLOSURE(this, &Snake::swipe));
 }

@@ -28,6 +28,7 @@ private:
 	void makeHead(Vector2 pos);
 	void initSnake(Vector2 pos);
 	void keyPressed(Event* event);
+	void swipe(Event* event);
 
 public:
 

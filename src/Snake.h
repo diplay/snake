@@ -24,6 +24,7 @@ private:
 
 	DIRECTION dir;
 	std::list<spSprite> snakeBody;
+	int gridW, gridH;
 
 	void makeHead(Vector2 pos);
 	void initSnake(Vector2 pos);

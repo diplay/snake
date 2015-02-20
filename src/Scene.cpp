@@ -5,6 +5,7 @@ void Scene::genBonus()
 	int gridX, gridY;
 	gridX = (rand() % gridW);
 	gridY = (rand() % gridH);
+	//log::messageln("bonus at %dx%d (%dx%d)", gridX, gridY, gridX * SIZE, gridY * SIZE);
 	Vector2 pos(gridX * SIZE, gridY * SIZE);
 	energy += (abs(gridX - snake->getGridPosition().x));
 	energy += (abs(gridY - snake->getGridPosition().y));
@@ -61,10 +62,12 @@ Scene::Scene()
 {
 	gridW = getStage()->getWidth() / SIZE;
 	gridH = getStage()->getHeight() / SIZE;
+	//log::messageln("gridW: %d\ngridH: %d", gridW, gridH);
+	//log::messageln("SIZE: %d", SIZE);
 	score = 0;
 	handicap = 100;
 	energy = 100;
-	Vector2 pos(gridW * SIZE / 2, gridH * SIZE / 2);
+	Vector2 pos(gridW / 2 * SIZE , gridH / 2 * SIZE);
 	snake = new Snake(pos);
 	addChild(snake);
 	scoreboard = new Scoreboard(Vector2((gridW - 5) * SIZE, 0));

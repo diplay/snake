@@ -105,12 +105,24 @@ void Snake::nextTact(STATUS s)
 			pos.x -= w;
 			break;
 	}
-	static float width = getStage()->getWidth();
+	/*static float width = getStage()->getWidth();
 	static float height = getStage()->getHeight();
 	if(pos.x >= width || pos.x < 0)
 		pos.x = (pos.x + width) > width ? pos.x - width : pos.x + width;
 	if(pos.y >= height || pos.y < 0)
 		pos.y = (pos.y + height) > height ? pos.y - height : pos.y + height;
+	*/
+	Point gridPos = Point((int)pos.x / w, (int)pos.y / h);
+	if(gridPos.x >= gridW)
+		gridPos.x -= gridW;
+	else if(gridPos.x < 0)
+		gridPos.x += gridW;
+	if(gridPos.y >= gridH)
+		gridPos.y -= gridH;
+	else if(gridPos.y < 0)
+		gridPos.y += gridH;
+	pos.x = gridPos.x * w;
+	pos.y = gridPos.y * h;
 	makeHead(pos);
 	switch(s)
 	{
@@ -141,6 +153,8 @@ Point Snake::getGridPosition() const
 
 Snake::Snake(Vector2 pos)
 {
+	gridW = getStage()->getWidth() / SIZE;
+	gridH = getStage()->getHeight() / SIZE;
 	initSnake(pos);
 	getStage()->addEventListener(KeyEvent::KEY_DOWN, CLOSURE(this, &Snake::keyPressed));
 	getStage()->addEventListener(TouchEvent::TOUCH_UP, CLOSURE(this, &Snake::swipe));

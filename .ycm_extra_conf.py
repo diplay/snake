@@ -84,7 +84,7 @@ flags = [
 '-DOX_HAVE_LIBJPEG',
 '-DOX_HAVE_LIBPNG',
 '-I',
-'/home/diplay/Загрузки/oxygine-framework/oxygine/src',
+'/home/diplay/projects/oxygine-framework/oxygine/src',
 '-I',
 '/usr/include/SDL2',
 '-I',

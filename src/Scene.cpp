@@ -1,5 +1,7 @@
 #include "Scene.h"
 
+extern Resources resources;
+
 void Scene::genBonus()
 {
 	int gridX, gridY;
@@ -78,6 +80,23 @@ Scene::Scene()
 }
 
 void Scene::gameOver()
+{
+	spTextField gameover = new TextField();
+	TextStyle style;
+	style.font = resources.getResFont("main")->getFont();
+	style.color = Color::White;
+	gameover->setText("Game Over");
+	gameover->setPosition(getStage()->getSize() / 2);
+	gameover->setStyle(style);
+	addChild(gameover);
+	removeChild(snake);
+	removeChild(bonus);
+	getStage()->addEventListener(KeyEvent::KEY_DOWN, CLOSURE(this, &Scene::anyKey));
+	getStage()->addEventListener(TouchEvent::TOUCH_UP, CLOSURE(this, &Scene::anyKey));
+	getStage()->addEventListener(TouchEvent::TOUCH_DOWN, CLOSURE(this, &Scene::anyKey));
+}
+
+void Scene::anyKey(Event* e)
 {
 	GameOverEvent ev(score);
 	dispatchEvent(&ev);

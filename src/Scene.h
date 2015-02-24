@@ -27,6 +27,7 @@ private:
 	BONUS_TYPE getRandomBonus();
 	void genBonus();
 	void gameOver();
+	void anyKey(Event* e);
 
 public:
 	Scene();

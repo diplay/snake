@@ -8,10 +8,14 @@ add_definitions(${OXYGINE_DEFINITIONS})
 include_directories(${OXYGINE_INCLUDE_DIRS})
 link_directories(${OXYGINE_LIBRARY_DIRS})
 
+add_subdirectory(../../oxygine-sound/ oxygine-sound)
+include_directories(${OXYGINESOUND_INCLUDE_DIRS})
+
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 add_executable(snake  ${SRCFILES})
 
-target_link_libraries(snake ${OXYGINE_CORE_LIBS})
+target_link_libraries(snake ${OXYGINE_CORE_LIBS} ${OXYGINESOUND_LIBS})
 
 add_custom_command(TARGET snake PRE_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory

@@ -85,6 +85,8 @@ void Scene::gameOver()
 	TextStyle style;
 	style.font = resources.getResFont("invaders")->getFont();
 	style.color = Color::White;
+	style.vAlign = TextStyle::VALIGN_MIDDLE;
+	style.hAlign = TextStyle::HALIGN_CENTER;
 	gameover->setText("Game Over");
 	gameover->setPosition(getStage()->getSize() / 2);
 	gameover->setStyle(style);

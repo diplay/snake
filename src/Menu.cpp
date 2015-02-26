@@ -12,9 +12,9 @@ void Menu::addItem(std::string text, EventCallback onClick)
 {
 	spTextField item = new TextField();
 	int position = 0;
-	for(auto it : items)
-		position = it->getY() * 2;
-	position += style.font->getSize();
+	if(!items.empty())
+		position = items.back()->getY();
+	position += style.font->getSize() * 2;
 	addChild(item);
 	item->setPosition(0, position);
 	item->setText(text);

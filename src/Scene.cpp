@@ -83,7 +83,7 @@ void Scene::gameOver()
 {
 	spTextField gameover = new TextField();
 	TextStyle style;
-	style.font = resources.getResFont("main")->getFont();
+	style.font = resources.getResFont("invaders")->getFont();
 	style.color = Color::White;
 	gameover->setText("Game Over");
 	gameover->setPosition(getStage()->getSize() / 2);

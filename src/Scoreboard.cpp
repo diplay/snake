@@ -12,7 +12,7 @@ Scoreboard::Scoreboard(Vector2 pos)
 	addChild(text);
 	text->setPosition(0, 0);
 	TextStyle style;
-	style.font = resources.getResFont("main")->getFont();
+	style.font = resources.getResFont("invaders")->getFont();
 	style.color = Color::White;
 	text->setStyle(style);
 	update();

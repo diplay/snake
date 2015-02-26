@@ -10,6 +10,7 @@ void preinit(){}
 void init()
 {
 	resources.loadXML("res.xml");
+	resources.getResFont("invaders")->getFont()->setScale(1.5);
 	Game* g = new Game();
 	//and add it to Stage as child
 	g->showMenu();

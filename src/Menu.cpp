@@ -4,7 +4,7 @@ extern Resources resources;
 
 Menu::Menu()
 {
-	style.font = resources.getResFont("main")->getFont();
+	style.font = resources.getResFont("invaders")->getFont();
 	style.color = Color::White;
 }
 

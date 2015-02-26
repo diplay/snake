@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 <resources>
 	<set path = "fonts" />
-	<font file="main.fnt" />
+	<font file="invaders.fnt" />
 </resources>

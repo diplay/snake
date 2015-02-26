@@ -90,7 +90,9 @@ flags = [
 '-I',
 '/home/diplay/projects/oxygine-framework/oxygine/third_party/linux/pthreads/include',
 '-I',
-'/home/diplay/projects/oxygine-framework/oxygine/third_party/linux/zlib'
+'/home/diplay/projects/oxygine-framework/oxygine/third_party/linux/zlib',
+'-I',
+'/home/diplay/projects/oxygine-sound/src'
 ]
 
 # Set this to the absolute path to the folder (NOT the file!) containing the

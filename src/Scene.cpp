@@ -1,6 +1,7 @@
 #include "Scene.h"
 
 extern Resources resources;
+extern SoundPlayer splayer;
 
 void Scene::genBonus()
 {
@@ -19,21 +20,21 @@ void Scene::nextTact(Event* e)
 {
 	if(bonus.get() &&
 			(snake->getGridPosition() == bonus->getGridPosition()))
+	{
+		removeChild(bonus);
 		switch(bonus->getType())
 		{
 			case BONUS_EAT:
-				removeChild(bonus);
-				bonus = NULL;
 				snake->nextTact(STATUS_EAT);
-				score += energy;
 				break;
 			case BONUS_HALF:
-				removeChild(bonus);
-				bonus = NULL;
 				snake->nextTact(STATUS_HALF);
-				score += energy;
 				break;
 		}
+		score += energy;
+		bonus = NULL;
+		spSoundInstance instance = splayer.play("bite");
+	}
 	else
 	{
 		snake->nextTact(STATUS_MOVE);
@@ -77,10 +78,12 @@ Scene::Scene()
 	genBonus();
 	spTween t = addTween(TweenDummy(), duration);
 	t->setDoneCallback(CLOSURE(this, &Scene::nextTact));
+	music = splayer.play("music", true);
 }
 
 void Scene::gameOver()
 {
+	music->stop();
 	spTextField gameover = new TextField();
 	TextStyle style;
 	style.font = resources.getResFont("invaders")->getFont();

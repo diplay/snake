@@ -2,4 +2,8 @@
 <resources>
 	<set path = "fonts" />
 	<font file="invaders.fnt" />
+
+	<set path = "sounds" />
+	<sound file="bite.ogg" />
+	<sound file="music.ogg" streaming="true" />
 </resources>

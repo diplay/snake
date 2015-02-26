@@ -1,6 +1,10 @@
 #include "Snake.h"
 #include "Bonus.h"
 #include "Scoreboard.h"
+#include "SoundPlayer.h"
+#include "SoundInstance.h"
+#include "SoundSystem.h"
+#include "ResSound.h"
 
 class GameOverEvent : public Event
 {
@@ -18,6 +22,7 @@ private:
 	spSnake snake;
 	spBonus bonus;
 	spScoreboard scoreboard;
+	spSoundInstance music;
 	int score, handicap, energy;
 
 	static const int duration = DURATION;

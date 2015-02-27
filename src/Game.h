@@ -9,6 +9,7 @@ class Game
 private:
 	spMenu menu;
 	spScene scene;
+	spSoundInstance menuMusic;
 public:
 	Game();
 	void showMenu();

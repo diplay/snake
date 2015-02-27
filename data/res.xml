@@ -5,7 +5,8 @@
 
 	<set path = "sounds" />
 	<sound file="bite.ogg" />
-	<sound file="music.ogg" streaming="true" />
+  <sound file="Latin Industries.ogg" streaming="true" id="music" />
+	<sound file="8bit Dungeon Boss.ogg" streaming="true" id="menu" />
 	<sound file="bonus.ogg" />
 	<sound file="gameover.ogg" />
 </resources>

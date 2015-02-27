@@ -1,5 +1,7 @@
 #include "Game.h"
 
+extern SoundPlayer splayer;
+
 Game::Game()
 {
 	menu = new Menu();
@@ -11,10 +13,12 @@ Game::Game()
 void Game::showMenu()
 {
 	getStage()->addChild(menu);
+	menuMusic = splayer.play("menu", true);
 }
 
 void Game::onNewGame(Event* e)
 {
+	menuMusic->fadeOut(500);
 	getStage()->removeChild(menu);
 	scene = new Scene();
 	scene->addEventListener(GameOverEvent::EVENT, CLOSURE(this, &Game::onGameOver));

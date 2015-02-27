@@ -1,5 +1,8 @@
 #include "oxygine-framework.h"
 #include "Game.h"
+#ifdef EMSCRIPTEN
+#include <emscripten.h>
+#endif
 
 using namespace oxygine;
 

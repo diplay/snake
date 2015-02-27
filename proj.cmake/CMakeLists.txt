@@ -13,7 +13,6 @@ link_directories(${OXYGINE_LIBRARY_DIRS})
 add_subdirectory(../../oxygine-sound/ oxygine-sound)
 include_directories(${OXYGINESOUND_INCLUDE_DIRS})
 
-
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 add_executable(snake  ${SRCFILES})
 

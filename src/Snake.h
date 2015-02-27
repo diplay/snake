@@ -23,19 +23,20 @@ private:
 	};
 
 	DIRECTION dir;
-	std::list<spSprite> snakeBody;
+	std::list<spColorRectSprite> snakeBody;
 	int gridW, gridH;
 
 	void makeHead(Vector2 pos);
 	void initSnake(Vector2 pos);
 	void keyPressed(Event* event);
 	void swipe(Event* event);
+	void detachTail(size_t sz);
 
 public:
 
 	Snake(Vector2 pos);
 	void nextTact(STATUS s);
-
+	void die();
 	Point getGridPosition() const;
 };
 

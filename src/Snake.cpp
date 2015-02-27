@@ -2,7 +2,7 @@
 
 void Snake::makeHead(Vector2 pos)
 {
-	spSprite head = new ColorRectSprite();
+	spColorRectSprite head = new ColorRectSprite();
 	head->setWidth(SIZE);
 	head->setHeight(SIZE);
 	head->setColor(Color::Olive);
@@ -133,11 +133,7 @@ void Snake::nextTact(STATUS s)
 	case STATUS_EAT:
 		break;
 	case STATUS_HALF:
-		for(size_t i = 0; i < snakeBody.size() / 2; i++)
-		{
-			removeChild(snakeBody.back());
-			snakeBody.pop_back();
-		}
+		detachTail(snakeBody.size() / 2);
 	}
 }
 
@@ -159,4 +155,24 @@ Snake::Snake(Vector2 pos)
 	getStage()->addEventListener(KeyEvent::KEY_DOWN, CLOSURE(this, &Snake::keyPressed));
 	getStage()->addEventListener(TouchEvent::TOUCH_UP, CLOSURE(this, &Snake::swipe));
 	getStage()->addEventListener(TouchEvent::TOUCH_DOWN, CLOSURE(this, &Snake::swipe));
+}
+
+void Snake::die()
+{
+	getStage()->removeEventListener(KeyEvent::KEY_DOWN, CLOSURE(this, &Snake::keyPressed));
+	getStage()->removeEventListener(TouchEvent::TOUCH_UP, CLOSURE(this, &Snake::swipe));
+	getStage()->removeEventListener(TouchEvent::TOUCH_DOWN, CLOSURE(this, &Snake::swipe));
+	detachTail(snakeBody.size());
+}
+
+void Snake::detachTail(size_t sz)
+{
+	int time = DURATION;
+	for(size_t i = 0; i < sz; i++)
+	{
+		spTween t = snakeBody.back()->addTween(Actor::TweenAlpha(0), time);
+		time += DURATION;
+		t->setDetachActor(true);
+		snakeBody.pop_back();
+	}
 }

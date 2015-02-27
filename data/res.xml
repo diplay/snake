@@ -6,4 +6,6 @@
 	<set path = "sounds" />
 	<sound file="bite.ogg" />
 	<sound file="music.ogg" streaming="true" />
+	<sound file="bonus.ogg" />
+	<sound file="gameover.ogg" />
 </resources>

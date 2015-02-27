@@ -26,14 +26,15 @@ void Scene::nextTact(Event* e)
 		{
 			case BONUS_EAT:
 				snake->nextTact(STATUS_EAT);
+				splayer.play("bite");
 				break;
 			case BONUS_HALF:
 				snake->nextTact(STATUS_HALF);
+				splayer.play("bonus");
 				break;
 		}
 		score += energy;
 		bonus = NULL;
-		spSoundInstance instance = splayer.play("bite");
 	}
 	else
 	{
@@ -94,8 +95,14 @@ void Scene::gameOver()
 	gameover->setPosition(getStage()->getSize() / 2);
 	gameover->setStyle(style);
 	addChild(gameover);
-	removeChild(snake);
+	snake->die();
 	removeChild(bonus);
+	spSoundInstance s = splayer.play("gameover");
+	s->setDoneCallback(CLOSURE(this, &Scene::setGameoverCallbacks));
+}
+
+void Scene::setGameoverCallbacks(Event* e)
+{
 	getStage()->addEventListener(KeyEvent::KEY_DOWN, CLOSURE(this, &Scene::anyKey));
 	getStage()->addEventListener(TouchEvent::TOUCH_UP, CLOSURE(this, &Scene::anyKey));
 	getStage()->addEventListener(TouchEvent::TOUCH_DOWN, CLOSURE(this, &Scene::anyKey));

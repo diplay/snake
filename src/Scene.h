@@ -33,6 +33,7 @@ private:
 	void genBonus();
 	void gameOver();
 	void anyKey(Event* e);
+	void setGameoverCallbacks(Event* e);
 
 public:
 	Scene();

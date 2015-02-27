@@ -14,6 +14,7 @@ public:
 	Game();
 	void showMenu();
 	void onNewGame(Event* e);
+	void onMenuFadeOut(Event* e);
 	void onGameOver(Event* e);
 	void onExit(Event* e);
 };

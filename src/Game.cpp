@@ -13,12 +13,20 @@ Game::Game()
 void Game::showMenu()
 {
 	getStage()->addChild(menu);
-	menuMusic = splayer.play("menu", true);
+	menu->setAlpha(0);
+	menu->addTween(Actor::TweenAlpha(255), 1000);
+	menuMusic = splayer.play("menu", true, 1000);
 }
 
 void Game::onNewGame(Event* e)
 {
 	menuMusic->fadeOut(500);
+	spTween t = menu->addTween(Actor::TweenAlpha(0), 1000);
+	t->addDoneCallback(CLOSURE(this, &Game::onMenuFadeOut));
+}
+
+void Game::onMenuFadeOut(Event* e)
+{
 	getStage()->removeChild(menu);
 	scene = new Scene();
 	scene->addEventListener(GameOverEvent::EVENT, CLOSURE(this, &Game::onGameOver));

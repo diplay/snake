@@ -16,16 +16,23 @@ public:
 	GameOverEvent(int score): Event(EVENT), score(score){}
 };
 
+enum GAME_MODE
+{
+	MODE_INFINITY = 0,
+	MODE_SURVIVAL = 1
+};
+
 class Scene : public Actor
 {
 private:
+	GAME_MODE mode;
 	spSnake snake;
 	spBonus bonus;
 	spScoreboard scoreboard;
 	spSoundInstance music;
 	int score, handicap, energy;
 
-	static const int duration = DURATION;
+	int duration;
 	int gridW, gridH;
 
 	void nextTact(Event* e);
@@ -36,7 +43,7 @@ private:
 	void setGameoverCallbacks(Event* e);
 
 public:
-	Scene();
+	Scene(GAME_MODE mode);
 };
 
 typedef oxygine::intrusive_ptr<Scene> spScene;

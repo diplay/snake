@@ -21,6 +21,12 @@ void Scene::nextTact(Event* e)
 	if(bonus.get() &&
 			(snake->getGridPosition() == bonus->getGridPosition()))
 	{
+		if(mode == MODE_SURVIVAL)
+		{
+			duration--;
+			if(duration < 50)
+				duration = 50;
+		}
 		removeChild(bonus);
 		switch(bonus->getType())
 		{
@@ -62,8 +68,10 @@ BONUS_TYPE Scene::getRandomBonus()
 		return BONUS_EAT;
 }
 
-Scene::Scene()
+Scene::Scene(GAME_MODE mode)
 {
+	this->mode = mode;
+	duration = DURATION;
 	gridW = getStage()->getWidth() / SIZE;
 	gridH = getStage()->getHeight() / SIZE;
 	//log::messageln("gridW: %d\ngridH: %d", gridW, gridH);

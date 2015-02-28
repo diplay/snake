@@ -21,12 +21,6 @@ void Scene::nextTact(Event* e)
 	if(bonus.get() &&
 			(snake->getGridPosition() == bonus->getGridPosition()))
 	{
-		if(mode == MODE_SURVIVAL)
-		{
-			duration--;
-			if(duration < 50)
-				duration = 50;
-		}
 		removeChild(bonus);
 		switch(bonus->getType())
 		{
@@ -37,9 +31,27 @@ void Scene::nextTact(Event* e)
 			case BONUS_HALF:
 				snake->nextTact(STATUS_HALF);
 				splayer.play("bonus");
+				if(mode == MODE_SURVIVAL)
+				{
+					TextStyle style;
+					style.font = resources.getResFont("invaders")->getFont();
+					style.vAlign = TextStyle::VALIGN_MIDDLE;
+					style.hAlign = TextStyle::HALIGN_CENTER;
+					spTextField speedup = new TextField();
+					addChild(speedup);
+					speedup->setText("Speed Up!");
+					speedup->setPosition(getStage()->getSize() / 2);
+					speedup->setStyle(style);
+					speedup->addTween(TweenAlpha(0), DURATION * 5)->setDetachActor(true);
+					speedup->addTween(Actor::TweenY(speedup->getY() - SIZE*2), DURATION * 5, Tween::EASE::ease_outQuad);
+					duration--;
+					if(duration < 50)
+						duration = 50;
+				}
 				break;
 		}
 		score += energy;
+		score += DURATION - duration;
 		bonus = NULL;
 	}
 	else
@@ -62,7 +74,12 @@ void Scene::nextTact(Event* e)
 BONUS_TYPE Scene::getRandomBonus()
 {
 	int r = rand() % 100;
-	if(r > 80)
+	int R;
+	if(mode == MODE_INFINITY)
+		R = 80;
+	else
+		R = 90;
+	if(r > R)
 		return BONUS_HALF;
 	else
 		return BONUS_EAT;

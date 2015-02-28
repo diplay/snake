@@ -42,8 +42,8 @@ void Scene::nextTact(Event* e)
 					speedup->setText("Speed Up!");
 					speedup->setPosition(getStage()->getSize() / 2);
 					speedup->setStyle(style);
-					speedup->addTween(TweenAlpha(0), DURATION * 5)->setDetachActor(true);
-					speedup->addTween(Actor::TweenY(speedup->getY() - SIZE*2), DURATION * 5, Tween::ease_outQuad);
+					speedup->addTween(TweenAlpha(0), DURATION * 10)->setDetachActor(true);
+					speedup->addTween(Actor::TweenY(speedup->getY() - SIZE*2), DURATION * 10, Tween::ease_outQuad);
 					duration--;
 					if(duration < 50)
 						duration = 50;

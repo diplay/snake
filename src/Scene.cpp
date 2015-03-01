@@ -99,7 +99,7 @@ Scene::Scene(GAME_MODE mode)
 	Vector2 pos(gridW / 2 * SIZE , gridH / 2 * SIZE);
 	snake = new Snake(pos);
 	addChild(snake);
-	scoreboard = new Scoreboard(Vector2((gridW - 5) * SIZE, 0));
+	scoreboard = new Scoreboard(Vector2(0, 0));
 	addChild(scoreboard);
 	genBonus();
 }

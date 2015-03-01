@@ -14,7 +14,7 @@ void preinit(){}
 void init()
 {
 	SoundSystem::instance = SoundSystem::create();
-	SoundSystem::instance->init(16);
+	SoundSystem::instance->init(4);
 	SoundPlayer::initialize();
 	splayer.setResources(&resources);
 	splayer.setVolume(0.5);

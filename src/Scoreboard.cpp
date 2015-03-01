@@ -14,6 +14,7 @@ Scoreboard::Scoreboard(Vector2 pos)
 	TextStyle style;
 	style.font = resources.getResFont("invaders")->getFont();
 	style.color = Color::White;
+	style.hAlign = TextStyle::HALIGN_LEFT;
 	text->setStyle(style);
 	update();
 }

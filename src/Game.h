@@ -10,7 +10,6 @@ private:
 	spMenu menu;
 	spScene scene;
 	spSoundInstance menuMusic;
-	GAME_MODE mode;
 public:
 	Game();
 	void showMenu();

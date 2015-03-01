@@ -44,6 +44,7 @@ private:
 
 public:
 	Scene(GAME_MODE mode);
+	void start();
 };
 
 typedef oxygine::intrusive_ptr<Scene> spScene;

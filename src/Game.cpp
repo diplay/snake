@@ -24,7 +24,7 @@ void Game::onNewGameSurvival(Event* e)
 	menuMusic->fadeOut(500);
 	spTween t = menu->addTween(Actor::TweenAlpha(0), 1000);
 	t->addDoneCallback(CLOSURE(this, &Game::onMenuFadeOut));
-	mode = MODE_SURVIVAL;
+	scene = new Scene(MODE_SURVIVAL);
 }
 
 void Game::onNewGame(Event* e)
@@ -32,15 +32,15 @@ void Game::onNewGame(Event* e)
 	menuMusic->fadeOut(500);
 	spTween t = menu->addTween(Actor::TweenAlpha(0), 1000);
 	t->addDoneCallback(CLOSURE(this, &Game::onMenuFadeOut));
-	mode = MODE_INFINITY;
+	scene = new Scene(MODE_INFINITY);
 }
 
 void Game::onMenuFadeOut(Event* e)
 {
 	getStage()->removeChild(menu);
-	scene = new Scene(mode);
 	scene->addEventListener(GameOverEvent::EVENT, CLOSURE(this, &Game::onGameOver));
 	getStage()->addChild(scene);
+	scene->start();
 }
 
 void Game::onExit(Event* e)

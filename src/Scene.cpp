@@ -102,9 +102,16 @@ Scene::Scene(GAME_MODE mode)
 	scoreboard = new Scoreboard(Vector2((gridW - 5) * SIZE, 0));
 	addChild(scoreboard);
 	genBonus();
+}
+
+void Scene::start()
+{
 	spTween t = addTween(TweenDummy(), duration);
 	t->setDoneCallback(CLOSURE(this, &Scene::nextTact));
-	music = splayer.play("music", true);
+	if(mode == MODE_INFINITY)
+		music = splayer.play("infinity", true);
+	else
+		music = splayer.play("survival", true);
 }
 
 void Scene::gameOver()

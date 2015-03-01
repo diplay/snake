@@ -176,3 +176,24 @@ void Snake::detachTail(size_t sz)
 		snakeBody.pop_back();
 	}
 }
+
+bool Snake::isPointOnSnakeBody(Point gridCorrd) const
+{
+	int w = snakeBody.front()->getWidth();
+	int h = snakeBody.front()->getHeight();
+	auto el = snakeBody.begin();
+	el++;
+	for(; el != snakeBody.end(); el++)
+	{
+		Vector2 pos = (*el)->getPosition();
+		Point gridPos = Point((int)pos.x / w, (int)pos.y / h);
+		if(gridPos == gridCorrd)
+			return true;
+	}
+	return false;
+}
+
+bool Snake::isPointOnSnake(Point gridCorrd) const
+{
+	return isPointOnSnakeBody(gridCorrd) || (gridCorrd == getGridPosition());
+}

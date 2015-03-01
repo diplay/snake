@@ -38,6 +38,8 @@ public:
 	void nextTact(STATUS s);
 	void die();
 	Point getGridPosition() const;
+	bool isPointOnSnake(Point gridCorrd) const;
+	bool isPointOnSnakeBody(Point gridCorrd) const;
 };
 
 typedef oxygine::intrusive_ptr<Snake> spSnake;

@@ -8,6 +8,7 @@ Game::Game()
 	menu->setPosition(getStage()->getSize() / 2);
 	menu->addItem("Infinity Mode", CLOSURE(this, &Game::onNewGame));
 	menu->addItem("Survival Mode", CLOSURE(this, &Game::onNewGameSurvival));
+	menu->addItem("Classic Mode", CLOSURE(this, &Game::onNewGameClassic));
 	menu->addItem("Exit", CLOSURE(this, &Game::onExit));
 }
 
@@ -19,6 +20,13 @@ void Game::showMenu()
 	menuMusic = splayer.play("menu", true, 1000);
 }
 
+void Game::onNewGameClassic(Event* e)
+{
+	menuMusic->fadeOut(500);
+	spTween t = menu->addTween(Actor::TweenAlpha(0), 1000);
+	t->addDoneCallback(CLOSURE(this, &Game::onMenuFadeOut));
+	scene = new Scene(MODE_CLASSIC);
+}
 void Game::onNewGameSurvival(Event* e)
 {
 	menuMusic->fadeOut(500);

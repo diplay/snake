@@ -5,13 +5,13 @@ extern SoundPlayer splayer;
 
 void Scene::genBonus()
 {
-	int gridX, gridY;
-	gridX = (rand() % gridW);
-	gridY = (rand() % gridH);
+	Point gridPos;
+	while(snake->isPointOnSnake(gridPos = Point(rand()%gridW, rand()%gridH)))
+	{}
 	//log::messageln("bonus at %dx%d (%dx%d)", gridX, gridY, gridX * SIZE, gridY * SIZE);
-	Vector2 pos(gridX * SIZE, gridY * SIZE);
-	energy += (abs(gridX - snake->getGridPosition().x));
-	energy += (abs(gridY - snake->getGridPosition().y));
+	Vector2 pos(gridPos.x * SIZE, gridPos.y * SIZE);
+	energy += (abs(gridPos.x - snake->getGridPosition().x));
+	energy += (abs(gridPos.y - snake->getGridPosition().y));
 	bonus = new Bonus(getRandomBonus(), pos);
 	addChild(bonus);
 }
@@ -50,8 +50,15 @@ void Scene::nextTact(Event* e)
 				}
 				break;
 		}
-		score += energy;
-		score += DURATION - duration;
+		if(mode != MODE_CLASSIC)
+		{
+			score += energy;
+			score += DURATION - duration;
+		}
+		else
+		{
+			score += 10;
+		}
 		bonus = NULL;
 	}
 	else
@@ -61,7 +68,15 @@ void Scene::nextTact(Event* e)
 	}
 	if(!bonus)
 		genBonus();
-	if(energy < 0)
+	if(mode == MODE_CLASSIC)
+	{
+		if(snake->isPointOnSnakeBody(snake->getGridPosition()))
+		{
+			gameOver();
+			return;
+		}
+	}
+	else if(energy < 0)
 	{
 		gameOver();
 		return;
@@ -74,10 +89,10 @@ void Scene::nextTact(Event* e)
 BONUS_TYPE Scene::getRandomBonus()
 {
 	int r = rand() % 100;
-	int R;
+	int R = 100;
 	if(mode == MODE_INFINITY)
 		R = 80;
-	else
+	else if (mode == MODE_SURVIVAL)
 		R = 90;
 	if(r > R)
 		return BONUS_HALF;
@@ -99,7 +114,7 @@ Scene::Scene(GAME_MODE mode)
 	Vector2 pos(gridW / 2 * SIZE , gridH / 2 * SIZE);
 	snake = new Snake(pos);
 	addChild(snake);
-	scoreboard = new Scoreboard(Vector2(0, 0));
+	scoreboard = new Scoreboard(Vector2(0, 0), mode);
 	addChild(scoreboard);
 	genBonus();
 }
@@ -110,8 +125,10 @@ void Scene::start()
 	t->setDoneCallback(CLOSURE(this, &Scene::nextTact));
 	if(mode == MODE_INFINITY)
 		music = splayer.play("infinity", true);
-	else
+	else if(mode == MODE_SURVIVAL)
 		music = splayer.play("survival", true);
+	else
+		music = splayer.play("classic", true);
 }
 
 void Scene::gameOver()

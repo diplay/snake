@@ -16,12 +16,6 @@ public:
 	GameOverEvent(int score): Event(EVENT), score(score){}
 };
 
-enum GAME_MODE
-{
-	MODE_INFINITY = 0,
-	MODE_SURVIVAL = 1
-};
-
 class Scene : public Actor
 {
 private:

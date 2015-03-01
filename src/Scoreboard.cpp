@@ -3,8 +3,9 @@
 
 extern Resources resources;
 
-Scoreboard::Scoreboard(Vector2 pos)
+Scoreboard::Scoreboard(Vector2 pos, GAME_MODE mode)
 {
+	this->mode = mode;
 	setPosition(pos);
 	score = 0;
 	energy = 0;
@@ -16,13 +17,16 @@ Scoreboard::Scoreboard(Vector2 pos)
 	style.color = Color::White;
 	style.hAlign = TextStyle::HALIGN_LEFT;
 	text->setStyle(style);
-	update();
+	updateText();
 }
 
-void Scoreboard::update()
+void Scoreboard::updateText()
 {
 	char str[255];
-	sprintf(str, "SCORE: %d\nENERGY: %d", score, energy);
+	if(mode == MODE_CLASSIC)
+		sprintf(str, "SCORE: %d", score);
+	else
+		sprintf(str, "SCORE: %d\nENERGY: %d", score, energy);
 	text->setText(str);
 }
 
@@ -30,5 +34,5 @@ void Scoreboard::setScore(int score, int energy)
 {
 	this->score = score;
 	this->energy = energy;
-	update();
+	updateText();
 }

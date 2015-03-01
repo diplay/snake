@@ -15,6 +15,7 @@ public:
 	void showMenu();
 	void onNewGame(Event* e);
 	void onNewGameSurvival(Event* e);
+	void onNewGameClassic(Event* e);
 	void onMenuFadeOut(Event* e);
 	void onGameOver(Event* e);
 	void onExit(Event* e);

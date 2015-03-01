@@ -7,6 +7,7 @@
 	<sound file="bite.ogg" />
   <sound file="Latin Industries.ogg" streaming="true" id="infinity" />
   <sound file="Kick Shock.ogg" streaming="true" id="survival" />
+	<sound file="Go Cart - Loop Mix.ogg" streaming="true" id="classic" />
 	<sound file="8bit Dungeon Boss.ogg" streaming="true" id="menu" />
 	<sound file="bonus.ogg" />
 	<sound file="gameover.ogg" />

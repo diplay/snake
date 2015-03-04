@@ -177,7 +177,7 @@ void Scene::gameOver()
 	std::string text = "Game Over\n\n";
 	int high = g->getHighScore(mode);
 	if(score > high)
-		text += "You've done new high score!";
+		text += "You've made a new high score!";
 	else
 		text += "High Score: " + std::to_string(high);
 	gameover->setText(text);

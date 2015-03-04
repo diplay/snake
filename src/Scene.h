@@ -25,7 +25,7 @@ private:
 	spScoreboard scoreboard;
 	spSoundInstance music;
 	std::list<spBonus> redstones;
-	int score, handicap, energy;
+	int score, handicap, handicapEnergy, energy;
 
 	int duration;
 	int gridW, gridH;

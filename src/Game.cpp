@@ -24,22 +24,15 @@ Game::Game()
 		ss >> mode >> score;
 		highscores[mode] = score;
 	}
-	for(auto it : highscores)
-	{
-		log::messageln("%s: %d", it.first.c_str(), it.second);
-	}
 }
 
 Game::~Game()
 {
-	log::messageln("lol game destuct");
 	char buf[256] = {0};
 	for(auto it : highscores)
 	{
-		log::messageln("%d", strlen(buf));
 		sprintf(&buf[strlen(buf)], "%s %d\n", it.first.c_str(), it.second);
 	}
-	log::messageln(buf);
 	file::handle h = file::open("scores", "wb");
 	file::write(h, buf, strlen(buf));
 	file::close(h);

@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <sstream>
 
 extern Resources resources;
 extern SoundPlayer splayer;
@@ -86,6 +87,12 @@ void Scene::nextTact(Event* e)
 		{
 			score += energy;
 			score += DURATION - duration;
+			score -= handicapEnergy;
+			energy += handicap;
+			handicapEnergy += handicap;
+			handicap--;
+			if(handicap < 0)
+				handicap = 0;
 		}
 		else
 		{
@@ -127,7 +134,7 @@ BONUS_TYPE Scene::getRandomBonus()
 	if(mode == MODE_INFINITY)
 		R = 80;
 	else if (mode == MODE_SURVIVAL)
-		R = 90;
+		R = 85;
 	if(r > R)
 		return BONUS_HALF;
 	else
@@ -143,7 +150,10 @@ Scene::Scene(GAME_MODE mode)
 	//log::messageln("gridW: %d\ngridH: %d", gridW, gridH);
 	//log::messageln("SIZE: %d", SIZE);
 	score = 0;
-	handicap = 100;
+	handicap = 0;
+	handicapEnergy = 0;
+	if(mode == MODE_INFINITY)
+		handicap = 20;
 	energy = 100;
 	Vector2 pos(gridW / 2 * SIZE , gridH / 2 * SIZE);
 	snake = new Snake(pos);
@@ -176,10 +186,14 @@ void Scene::gameOver()
 	style.hAlign = TextStyle::HALIGN_CENTER;
 	std::string text = "Game Over\n\n";
 	int high = g->getHighScore(mode);
+	std::string strHigh;
+	std::ostringstream os;
+	os << high;
+	strHigh = os.str();
 	if(score > high)
 		text += "You've made a new high score!";
 	else
-		text += "High Score: " + std::to_string(high);
+		text += "High Score: " + strHigh;
 	gameover->setText(text);
 	gameover->setPosition(getStage()->getSize() / 2);
 	gameover->setStyle(style);

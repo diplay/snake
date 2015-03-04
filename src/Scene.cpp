@@ -16,8 +16,37 @@ void Scene::genBonus()
 	addChild(bonus);
 }
 
+void Scene::genRedstone()
+{
+	int r = rand() % 1000;
+	if(r < (int)redstones.size())
+	{
+		removeChild(*redstones.begin());
+		redstones.erase(redstones.begin());
+	}
+	if(r < 10)
+	{
+		Point gridPos;
+		while(snake->isPointOnSnake(gridPos = Point(rand()%gridW, rand()%gridH))
+				|| gridPos == bonus->getGridPosition())
+		{}
+		//log::messageln("bonus at %dx%d (%dx%d)", gridX, gridY, gridX * SIZE, gridY * SIZE);
+		Vector2 pos(gridPos.x * SIZE, gridPos.y * SIZE);
+		redstones.push_back(new Bonus(BONUS_REDSTONE, pos));
+		addChild(redstones.back());
+	}
+}
+
 void Scene::nextTact(Event* e)
 {
+	for(auto stone : redstones)
+	{
+		if(stone->getGridPosition() == snake->getGridPosition())
+		{
+			gameOver();
+			return;
+		}
+	}
 	if(bonus.get() &&
 			(snake->getGridPosition() == bonus->getGridPosition()))
 	{
@@ -48,6 +77,8 @@ void Scene::nextTact(Event* e)
 					if(duration < 50)
 						duration = 50;
 				}
+				break;
+			default:
 				break;
 		}
 		if(mode != MODE_CLASSIC)
@@ -81,6 +112,8 @@ void Scene::nextTact(Event* e)
 		gameOver();
 		return;
 	}
+	if(mode == MODE_SURVIVAL)
+		genRedstone();
 	spTween t = addTween(TweenDummy(), duration);
 	t->setDoneCallback(CLOSURE(this, &Scene::nextTact));
 	scoreboard->setScore(score, energy);

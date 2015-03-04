@@ -6,7 +6,8 @@ using namespace oxygine;
 enum BONUS_TYPE
 {
 	BONUS_EAT = 0,
-	BONUS_HALF = 1
+	BONUS_HALF = 1,
+	BONUS_REDSTONE = 2
 };
 
 class Bonus : public Actor

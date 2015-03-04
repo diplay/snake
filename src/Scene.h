@@ -24,6 +24,7 @@ private:
 	spBonus bonus;
 	spScoreboard scoreboard;
 	spSoundInstance music;
+	std::list<spBonus> redstones;
 	int score, handicap, energy;
 
 	int duration;
@@ -32,6 +33,7 @@ private:
 	void nextTact(Event* e);
 	BONUS_TYPE getRandomBonus();
 	void genBonus();
+	void genRedstone();
 	void gameOver();
 	void anyKey(Event* e);
 	void setGameoverCallbacks(Event* e);

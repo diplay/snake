@@ -14,6 +14,9 @@ Bonus::Bonus(BONUS_TYPE t, Vector2 pos)
 	case BONUS_HALF:
 		view->setColor(Color::LightGreen);
 		break;
+	case BONUS_REDSTONE:
+		view->setColor(Color::Red);
+		break;
 	}
 	view->setPosition(pos);
 	addChild(view);

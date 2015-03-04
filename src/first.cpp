@@ -8,6 +8,7 @@ using namespace oxygine;
 
 Resources resources;
 SoundPlayer splayer;
+Game* g;
 
 void preinit(){}
 
@@ -37,7 +38,7 @@ void init()
 #endif
 	}
 
-	Game* g = new Game();
+	g = new Game();
 	g->showMenu();
 }
 
@@ -51,6 +52,7 @@ void update()
 
 void destroy()
 {
+	delete g;
 	splayer.stop();
 	SoundSystem::instance->stop();
 	resources.free();

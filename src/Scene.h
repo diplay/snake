@@ -11,9 +11,9 @@ class GameOverEvent : public Event
 public:
 	enum {EVENT = eventID('G', 'm', 'O', 'r')};
 
-	int score;
+	int score, mode;
 
-	GameOverEvent(int score): Event(EVENT), score(score){}
+	GameOverEvent(int score, GAME_MODE mode): Event(EVENT), score(score), mode(mode){}
 };
 
 class Scene : public Actor

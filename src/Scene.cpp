@@ -195,6 +195,6 @@ void Scene::anyKey(Event* e)
 	getStage()->removeEventListener(KeyEvent::KEY_DOWN, CLOSURE(this, &Scene::anyKey));
 	getStage()->removeEventListener(TouchEvent::TOUCH_UP, CLOSURE(this, &Scene::anyKey));
 	getStage()->removeEventListener(TouchEvent::TOUCH_DOWN, CLOSURE(this, &Scene::anyKey));
-	GameOverEvent ev(score);
+	GameOverEvent ev(score, mode);
 	dispatchEvent(&ev);
 }

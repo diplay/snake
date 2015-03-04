@@ -1,6 +1,7 @@
 #include "oxygine-framework.h"
 #include "Scene.h"
 #include "Menu.h"
+#include <map>
 
 using namespace oxygine;
 
@@ -10,8 +11,10 @@ private:
 	spMenu menu;
 	spScene scene;
 	spSoundInstance menuMusic;
+	std::map<std::string, int> highscores;
 public:
 	Game();
+	~Game();
 	void showMenu();
 	void onNewGame(Event* e);
 	void onNewGameSurvival(Event* e);

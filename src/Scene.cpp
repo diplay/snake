@@ -1,7 +1,8 @@
-#include "Scene.h"
+#include "Game.h"
 
 extern Resources resources;
 extern SoundPlayer splayer;
+extern Game* g;
 
 void Scene::genBonus()
 {
@@ -173,7 +174,13 @@ void Scene::gameOver()
 	style.color = Color::White;
 	style.vAlign = TextStyle::VALIGN_MIDDLE;
 	style.hAlign = TextStyle::HALIGN_CENTER;
-	gameover->setText("Game Over");
+	std::string text = "Game Over\n\n";
+	int high = g->getHighScore(mode);
+	if(score > high)
+		text += "You've done new high score!";
+	else
+		text += "High Score: " + std::to_string(high);
+	gameover->setText(text);
 	gameover->setPosition(getStage()->getSize() / 2);
 	gameover->setStyle(style);
 	addChild(gameover);

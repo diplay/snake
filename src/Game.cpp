@@ -45,6 +45,22 @@ Game::~Game()
 	file::close(h);
 }
 
+int Game::getHighScore(GAME_MODE mode)
+{
+	switch(mode)
+	{
+	case MODE_INFINITY:
+		return highscores["infinity"];
+		break;
+	case MODE_SURVIVAL:
+		return highscores["survival"];
+		break;
+	case MODE_CLASSIC:
+		return highscores["classic"];
+		break;
+	}
+}
+
 void Game::showMenu()
 {
 	getStage()->addChild(menu);

@@ -15,6 +15,7 @@ private:
 public:
 	Game();
 	~Game();
+	int getHighScore(GAME_MODE mode);
 	void showMenu();
 	void onNewGame(Event* e);
 	void onNewGameSurvival(Event* e);

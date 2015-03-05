@@ -17,6 +17,7 @@ public:
 	~Game();
 	int getHighScore(GAME_MODE mode);
 	void showMenu();
+	void backButton(Event* e);
 	void onNewGame(Event* e);
 	void onNewGameSurvival(Event* e);
 	void onNewGameClassic(Event* e);

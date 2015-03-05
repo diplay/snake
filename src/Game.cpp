@@ -24,6 +24,7 @@ Game::Game()
 		ss >> mode >> score;
 		highscores[mode] = score;
 	}
+	getStage()->addEventListener(KeyEvent::KEY_UP, CLOSURE(this, &Game::backButton));
 }
 
 Game::~Game()
@@ -51,6 +52,17 @@ int Game::getHighScore(GAME_MODE mode)
 	case MODE_CLASSIC:
 		return highscores["classic"];
 		break;
+	}
+}
+
+void Game::backButton(Event* e)
+{
+	KeyEvent* ev = (KeyEvent*)e;
+	if(scene.get() == NULL)
+	{
+		if(ev->data->keysym.sym == SDLK_AC_BACK ||
+			ev->data->keysym.sym == SDLK_ESCAPE)
+			onExit(e);
 	}
 }
 

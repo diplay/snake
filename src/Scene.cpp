@@ -41,6 +41,8 @@ void Scene::genRedstone()
 
 void Scene::nextTact(Event* e)
 {
+	if(paused)
+		return;
 	for(auto stone : redstones)
 	{
 		if(stone->getGridPosition() == snake->getGridPosition())
@@ -85,9 +87,12 @@ void Scene::nextTact(Event* e)
 		}
 		if(mode != MODE_CLASSIC)
 		{
-			score += energy;
+			if(energy >= handicapEnergy)
+			{
+				score += energy;
+				score -= handicapEnergy;
+			}
 			score += DURATION - duration;
-			score -= handicapEnergy;
 			energy += handicap;
 			handicapEnergy += handicap;
 			handicap--;
@@ -143,8 +148,19 @@ BONUS_TYPE Scene::getRandomBonus()
 
 Scene::Scene(GAME_MODE mode)
 {
+	paused = false;
 	this->mode = mode;
 	duration = DURATION;
+	pauseText = new TextField();
+	TextStyle style;
+	style.font = resources.getResFont("invaders")->getFont();
+	style.color = Color::White;
+	style.vAlign = TextStyle::VALIGN_MIDDLE;
+	style.hAlign = TextStyle::HALIGN_CENTER;
+	pauseText->setStyle(style);
+	pauseText->setText("Game Paused\n\nContinue");
+	pauseText->setPosition(getStage()->getSize() / 2);
+	pauseText->addEventListener(TouchEvent::TOUCH_UP, CLOSURE(this, &Scene::unpauseTouch));
 	gridW = getStage()->getWidth() / SIZE;
 	gridH = getStage()->getHeight() / SIZE;
 	//log::messageln("gridW: %d\ngridH: %d", gridW, gridH);
@@ -161,18 +177,23 @@ Scene::Scene(GAME_MODE mode)
 	scoreboard = new Scoreboard(Vector2(0, 0), mode);
 	addChild(scoreboard);
 	genBonus();
+	getStage()->addEventListener(KeyEvent::KEY_DOWN, CLOSURE(this, &Scene::backButton));
 }
 
 void Scene::start()
 {
+	if(!paused)
+	{
+		if(mode == MODE_INFINITY)
+			music = splayer.play("infinity", true);
+		else if(mode == MODE_SURVIVAL)
+			music = splayer.play("survival", true);
+		else
+			music = splayer.play("classic", true);
+	}
+	paused = false;
 	spTween t = addTween(TweenDummy(), duration);
 	t->setDoneCallback(CLOSURE(this, &Scene::nextTact));
-	if(mode == MODE_INFINITY)
-		music = splayer.play("infinity", true);
-	else if(mode == MODE_SURVIVAL)
-		music = splayer.play("survival", true);
-	else
-		music = splayer.play("classic", true);
 }
 
 void Scene::gameOver()
@@ -218,4 +239,36 @@ void Scene::anyKey(Event* e)
 	getStage()->removeEventListener(TouchEvent::TOUCH_DOWN, CLOSURE(this, &Scene::anyKey));
 	GameOverEvent ev(score, mode);
 	dispatchEvent(&ev);
+}
+
+void Scene::pause()
+{
+	addChild(pauseText);
+	paused = true;
+}
+
+void Scene::unpauseTouch(Event* e)
+{
+	removeChild(pauseText);
+	e->stopImmediatePropagation();
+	start();
+}
+
+void Scene::backButton(Event* e)
+{
+	KeyEvent* ev = (KeyEvent*)e;
+	if(ev->data->keysym.sym == SDLK_AC_BACK ||
+		ev->data->keysym.sym == SDLK_ESCAPE)
+	{
+		if(paused)
+		{
+			music->stop();
+			GameOverEvent ev(0, mode);
+			dispatchEvent(&ev);
+		}
+		else
+		{
+			pause();
+		}
+	}
 }

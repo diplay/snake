@@ -24,8 +24,10 @@ private:
 	spBonus bonus;
 	spScoreboard scoreboard;
 	spSoundInstance music;
+	spTextField pauseText;
 	std::list<spBonus> redstones;
 	int score, handicap, handicapEnergy, energy;
+	bool paused;
 
 	int duration;
 	int gridW, gridH;
@@ -35,8 +37,11 @@ private:
 	void genBonus();
 	void genRedstone();
 	void gameOver();
+	void pause();
 	void anyKey(Event* e);
+	void backButton(Event* e);
 	void setGameoverCallbacks(Event* e);
+	void unpauseTouch(Event* e);
 
 public:
 	Scene(GAME_MODE mode);

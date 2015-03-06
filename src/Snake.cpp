@@ -62,6 +62,7 @@ void Snake::swipe(Event* event)
 	case TouchEvent::TOUCH_DOWN:
 		pressed = true;
 		origin = e->position;
+		log::messageln("touch down");
 		break;
 	case TouchEvent::TOUCH_UP:
 		if(pressed)
@@ -152,16 +153,10 @@ Snake::Snake(Vector2 pos)
 	gridW = getStage()->getWidth() / SIZE;
 	gridH = getStage()->getHeight() / SIZE;
 	initSnake(pos);
-	getStage()->addEventListener(KeyEvent::KEY_DOWN, CLOSURE(this, &Snake::keyPressed));
-	getStage()->addEventListener(TouchEvent::TOUCH_UP, CLOSURE(this, &Snake::swipe));
-	getStage()->addEventListener(TouchEvent::TOUCH_DOWN, CLOSURE(this, &Snake::swipe));
 }
 
 void Snake::die()
 {
-	getStage()->removeEventListener(KeyEvent::KEY_DOWN, CLOSURE(this, &Snake::keyPressed));
-	getStage()->removeEventListener(TouchEvent::TOUCH_UP, CLOSURE(this, &Snake::swipe));
-	getStage()->removeEventListener(TouchEvent::TOUCH_DOWN, CLOSURE(this, &Snake::swipe));
 	detachTail(snakeBody.size());
 }
 

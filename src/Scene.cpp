@@ -8,8 +8,20 @@ extern Game* g;
 void Scene::genBonus()
 {
 	Point gridPos;
-	while(snake->isPointOnSnake(gridPos = Point(rand()%gridW, rand()%gridH)))
-	{}
+	bool flag;
+	do
+	{
+		gridPos = Point(rand()%gridW, rand()%gridH);
+		flag = false;
+		for(auto stone : redstones)
+		{
+			if(stone->getGridPosition() == gridPos)
+			{
+				flag = true;
+				continue;
+			}
+		}
+	} while(snake->isPointOnSnake(gridPos) || flag);
 	//log::messageln("bonus at %dx%d (%dx%d)", gridX, gridY, gridX * SIZE, gridY * SIZE);
 	Vector2 pos(gridPos.x * SIZE, gridPos.y * SIZE);
 	energy += (abs(gridPos.x - snake->getGridPosition().x));
@@ -66,20 +78,22 @@ void Scene::nextTact(Event* e)
 				splayer.play("bonus");
 				if(mode == MODE_SURVIVAL)
 				{
-					TextStyle style;
-					style.font = resources.getResFont("invaders")->getFont();
-					style.vAlign = TextStyle::VALIGN_MIDDLE;
-					style.hAlign = TextStyle::HALIGN_CENTER;
-					spTextField speedup = new TextField();
-					addChild(speedup);
-					speedup->setText("Speed Up!");
-					speedup->setPosition(getStage()->getSize() / 2);
-					speedup->setStyle(style);
-					speedup->addTween(TweenAlpha(0), DURATION * 10)->setDetachActor(true);
-					speedup->addTween(Actor::TweenY(speedup->getY() - SIZE*2), DURATION * 10, Tween::ease_outQuad);
-					duration--;
-					if(duration < 50)
-						duration = 50;
+					if(duration > 50)
+					{
+						TextStyle style;
+						style.font = resources.getResFont("invaders")->getFont();
+						style.vAlign = TextStyle::VALIGN_MIDDLE;
+						style.hAlign = TextStyle::HALIGN_CENTER;
+						spTextField speedup = new TextField();
+						addChild(speedup);
+						speedup->setText("Speed Up!");
+						speedup->setPosition(getStage()->getSize() / 2);
+						speedup->setStyle(style);
+						speedup->addTween(TweenAlpha(0), DURATION * 10)->setDetachActor(true);
+						speedup->addTween(Actor::TweenY(speedup->getY() - SIZE*2), DURATION * 10, Tween::ease_outQuad);
+						duration--;
+						energy += 5;
+					}
 				}
 				break;
 			default:
@@ -87,11 +101,10 @@ void Scene::nextTact(Event* e)
 		}
 		if(mode != MODE_CLASSIC)
 		{
-			if(energy >= handicapEnergy)
-			{
+			if(mode == MODE_INFINITY)
+				score += energy / 5;
+			else
 				score += energy;
-				score -= handicapEnergy;
-			}
 			score += DURATION - duration;
 			energy += handicap;
 			handicapEnergy += handicap;
@@ -160,7 +173,7 @@ Scene::Scene(GAME_MODE mode)
 	pauseText->setStyle(style);
 	pauseText->setText("Game Paused\n\nContinue");
 	pauseText->setPosition(getStage()->getSize() / 2);
-	pauseText->addEventListener(TouchEvent::TOUCH_UP, CLOSURE(this, &Scene::unpauseTouch));
+	pauseText->addEventListener(TouchEvent::TOUCH_DOWN, CLOSURE(this, &Scene::unpauseTouch));
 	gridW = getStage()->getWidth() / SIZE;
 	gridH = getStage()->getHeight() / SIZE;
 	//log::messageln("gridW: %d\ngridH: %d", gridW, gridH);
@@ -177,7 +190,7 @@ Scene::Scene(GAME_MODE mode)
 	scoreboard = new Scoreboard(Vector2(0, 0), mode);
 	addChild(scoreboard);
 	genBonus();
-	getStage()->addEventListener(KeyEvent::KEY_DOWN, CLOSURE(this, &Scene::backButton));
+	getStage()->addEventListener(KeyEvent::KEY_UP, CLOSURE(this, &Scene::backButton));
 }
 
 void Scene::start()
@@ -191,6 +204,13 @@ void Scene::start()
 		else
 			music = splayer.play("classic", true);
 	}
+	else
+	{
+		splayer.resume();
+	}
+	getStage()->addEventListener(KeyEvent::KEY_DOWN, CLOSURE(snake.get(), &Snake::keyPressed));
+	getStage()->addEventListener(TouchEvent::TOUCH_UP, CLOSURE(snake.get(), &Snake::swipe));
+	getStage()->addEventListener(TouchEvent::TOUCH_DOWN, CLOSURE(snake.get(), &Snake::swipe));
 	paused = false;
 	spTween t = addTween(TweenDummy(), duration);
 	t->setDoneCallback(CLOSURE(this, &Scene::nextTact));
@@ -237,14 +257,20 @@ void Scene::anyKey(Event* e)
 	getStage()->removeEventListener(KeyEvent::KEY_DOWN, CLOSURE(this, &Scene::anyKey));
 	getStage()->removeEventListener(TouchEvent::TOUCH_UP, CLOSURE(this, &Scene::anyKey));
 	getStage()->removeEventListener(TouchEvent::TOUCH_DOWN, CLOSURE(this, &Scene::anyKey));
+	snake->removeAllEventListeners();
 	GameOverEvent ev(score, mode);
 	dispatchEvent(&ev);
+	removeAllEventListeners();
 }
 
 void Scene::pause()
 {
+	splayer.setVolume(0.5f);
 	addChild(pauseText);
 	paused = true;
+	getStage()->removeEventListener(KeyEvent::KEY_DOWN, CLOSURE(snake.get(), &Snake::keyPressed));
+	getStage()->removeEventListener(TouchEvent::TOUCH_UP, CLOSURE(snake.get(), &Snake::swipe));
+	getStage()->removeEventListener(TouchEvent::TOUCH_DOWN, CLOSURE(snake.get(), &Snake::swipe));
 }
 
 void Scene::unpauseTouch(Event* e)
@@ -262,9 +288,12 @@ void Scene::backButton(Event* e)
 	{
 		if(paused)
 		{
+			snake->removeAllEventListeners();
+			splayer.setVolume(1.0f);
 			music->stop();
 			GameOverEvent ev(0, mode);
 			dispatchEvent(&ev);
+			removeAllEventListeners();
 		}
 		else
 		{

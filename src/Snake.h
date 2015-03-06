@@ -22,6 +22,8 @@ private:
 		LEFT = 3
 	};
 
+	friend class Scene;
+
 	DIRECTION dir;
 	std::list<spColorRectSprite> snakeBody;
 	int gridW, gridH;

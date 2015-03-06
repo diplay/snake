@@ -10,7 +10,7 @@ Game::Game()
 	menu->addItem("Infinity Mode", CLOSURE(this, &Game::onNewGame));
 	menu->addItem("Survival Mode", CLOSURE(this, &Game::onNewGameSurvival));
 	menu->addItem("Classic Mode", CLOSURE(this, &Game::onNewGameClassic));
-	menu->addItem("Exit", CLOSURE(this, &Game::onExit));
+	//menu->addItem("Exit", CLOSURE(this, &Game::onExit));
 	file::handle h = file::open("scores", "rb");
 	char buf[256];
 	std::string mode;

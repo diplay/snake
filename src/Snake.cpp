@@ -25,6 +25,12 @@ void Snake::initSnake(Vector2 pos)
 	makeHead(pos);
 }
 
+void Snake::changeDir(DIRECTION d)
+{
+	if(abs(d - prevDir) != 2)
+		dir = d;
+}
+
 void Snake::keyPressed(Event* event)
 {
 	KeyEvent* e = (KeyEvent*)event;
@@ -47,8 +53,7 @@ void Snake::keyPressed(Event* event)
 			return;
 			break;
 	}
-	if(abs(newdir - dir) != 2)
-		dir = newdir;
+	changeDir(newdir);
 }
 
 void Snake::swipe(Event* event)
@@ -78,8 +83,7 @@ void Snake::swipe(Event* event)
 			for(int i = 1; i < 4; i++)
 				if(ratings[i] > ratings[newdir])
 					newdir = (DIRECTION)i;
-			if(abs(newdir - dir) != 2)
-				dir = newdir;
+			changeDir(newdir);
 		}
 		pressed = false;
 		break;
@@ -106,6 +110,7 @@ void Snake::nextTact(STATUS s)
 			pos.x -= w;
 			break;
 	}
+	prevDir = dir;
 	/*static float width = getStage()->getWidth();
 	static float height = getStage()->getHeight();
 	if(pos.x >= width || pos.x < 0)

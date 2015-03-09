@@ -91,7 +91,7 @@ void Scene::nextTact(Event* e)
 						speedup->setStyle(style);
 						speedup->addTween(TweenAlpha(0), DURATION * 10)->setDetachActor(true);
 						speedup->addTween(Actor::TweenY(speedup->getY() - SIZE*2), DURATION * 10, Tween::ease_outQuad);
-						duration--;
+						duration -= 2;
 						energy += 5;
 					}
 				}
@@ -104,8 +104,7 @@ void Scene::nextTact(Event* e)
 			if(mode == MODE_INFINITY)
 				score += energy / 5;
 			else
-				score += energy;
-			score += DURATION - duration;
+				score += energy + 2*DURATION - duration;
 			energy += handicap;
 			handicapEnergy += handicap;
 			handicap--;
@@ -125,7 +124,7 @@ void Scene::nextTact(Event* e)
 	}
 	if(!bonus)
 		genBonus();
-	if(mode == MODE_CLASSIC)
+	if(mode != MODE_INFINITY)
 	{
 		if(snake->isPointOnSnakeBody(snake->getGridPosition()))
 		{
@@ -149,10 +148,7 @@ BONUS_TYPE Scene::getRandomBonus()
 {
 	int r = rand() % 100;
 	int R = 100;
-	if(mode == MODE_INFINITY)
-		R = 80;
-	else if (mode == MODE_SURVIVAL)
-		R = 85;
+	R = 80;
 	if(r > R)
 		return BONUS_HALF;
 	else
@@ -163,7 +159,10 @@ Scene::Scene(GAME_MODE mode)
 {
 	paused = false;
 	this->mode = mode;
-	duration = DURATION;
+	if(mode == MODE_SURVIVAL)
+		duration = 2*DURATION;
+	else
+		duration = DURATION;
 	pauseText = new TextField();
 	TextStyle style;
 	style.font = resources.getResFont("invaders")->getFont();

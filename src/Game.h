@@ -12,6 +12,7 @@ private:
 	spScene scene;
 	spSoundInstance menuMusic;
 	std::map<std::string, int> highscores;
+	std::map<std::string, int> settings;
 public:
 	Game();
 	~Game();

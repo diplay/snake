@@ -24,7 +24,7 @@ private:
 
 	friend class Scene;
 
-	DIRECTION dir;
+	DIRECTION dir, prevDir;
 	std::list<spColorRectSprite> snakeBody;
 	int gridW, gridH;
 
@@ -33,6 +33,7 @@ private:
 	void keyPressed(Event* event);
 	void swipe(Event* event);
 	void detachTail(size_t sz);
+	void changeDir(DIRECTION d);
 
 public:
 

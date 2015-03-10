@@ -38,7 +38,7 @@ private:
 public:
 
 	Snake(Vector2 pos);
-	void nextTact(STATUS s);
+	void nextTact(STATUS s, int duration);
 	void die();
 	Point getGridPosition() const;
 	bool isPointOnSnake(Point gridCorrd) const;

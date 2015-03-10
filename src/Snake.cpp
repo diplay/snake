@@ -7,6 +7,8 @@ void Snake::makeHead(Vector2 pos)
 	head->setHeight(SIZE);
 	head->setColor(Color::Olive);
 	head->setPosition(pos);
+	head->setInputEnabled(false);
+	head->setUserData(0);
 	addChild(head);
 	snakeBody.push_front(head);
 }
@@ -15,13 +17,17 @@ void Snake::initSnake(Vector2 pos)
 {
 	dir = UP;
 	//Vector2 pos = getStage()->getSize()/2;
+	setInputChildrenEnabled(false);
 	makeHead(pos);
 	int h = snakeBody.front()->getHeight();
 	pos.y -= h;
+	snakeBody.front()->setUserData(new Vector2(pos));
 	makeHead(pos);
 	pos.y -= h;
+	snakeBody.front()->setUserData(new Vector2(pos));
 	makeHead(pos);
 	pos.y -= h;
+	snakeBody.front()->setUserData(new Vector2(pos));
 	makeHead(pos);
 }
 
@@ -67,7 +73,6 @@ void Snake::swipe(Event* event)
 	case TouchEvent::TOUCH_DOWN:
 		pressed = true;
 		origin = e->position;
-		log::messageln("touch down");
 		break;
 	case TouchEvent::TOUCH_UP:
 		if(pressed)
@@ -90,11 +95,14 @@ void Snake::swipe(Event* event)
 	}
 }
 
-void Snake::nextTact(STATUS s)
+void Snake::nextTact(STATUS s, int duration)
 {
 	Vector2 pos = snakeBody.front()->getPosition();
+	Vector2 prevPos = pos;
 	int w = snakeBody.front()->getWidth();
 	int h = snakeBody.front()->getHeight();
+	int Width = getStage()->getWidth();
+	int Height = getStage()->getHeight();
 	switch(dir)
 	{
 		case UP:
@@ -110,32 +118,45 @@ void Snake::nextTact(STATUS s)
 			pos.x -= w;
 			break;
 	}
+	snakeBody.front()->setUserData(new Vector2(pos));
 	prevDir = dir;
-	/*static float width = getStage()->getWidth();
-	static float height = getStage()->getHeight();
-	if(pos.x >= width || pos.x < 0)
-		pos.x = (pos.x + width) > width ? pos.x - width : pos.x + width;
-	if(pos.y >= height || pos.y < 0)
-		pos.y = (pos.y + height) > height ? pos.y - height : pos.y + height;
-	*/
 	Point gridPos = Point((int)pos.x / w, (int)pos.y / h);
 	if(gridPos.x >= gridW)
+	{
 		gridPos.x -= gridW;
+		prevPos.x -= Width;
+	}
 	else if(gridPos.x < 0)
+	{
 		gridPos.x += gridW;
+		prevPos.x += Width;
+	}
 	if(gridPos.y >= gridH)
+	{
 		gridPos.y -= gridH;
+		prevPos.y -= Height;
+	}
 	else if(gridPos.y < 0)
+	{
 		gridPos.y += gridH;
+		prevPos.y += Height;
+	}
 	pos.x = gridPos.x * w;
 	pos.y = gridPos.y * h;
-	makeHead(pos);
+	makeHead(prevPos);
+	snakeBody.front()->addTween(TweenPosition(pos), duration);
 	switch(s)
 	{
 	case STATUS_MOVE:
-		removeChild(snakeBody.back());
+	{
+		spColorRectSprite tail = snakeBody.back();
+		Vector2* target = (Vector2*)snakeBody.back()->getUserData();
+		tail->addTween(TweenPosition(*target), duration)
+			->setDetachActor(true);
 		snakeBody.pop_back();
+		delete target;
 		break;
+	}
 	case STATUS_EAT:
 		break;
 	case STATUS_HALF:
@@ -173,6 +194,8 @@ void Snake::detachTail(size_t sz)
 		spTween t = snakeBody.back()->addTween(Actor::TweenAlpha(0), time);
 		time += DURATION;
 		t->setDetachActor(true);
+		if(snakeBody.back()->getUserData())
+			delete (Vector2*)snakeBody.back()->getUserData();
 		snakeBody.pop_back();
 	}
 }

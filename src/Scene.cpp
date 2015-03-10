@@ -41,7 +41,7 @@ void Scene::genRedstone()
 	if(r < 10)
 	{
 		Point gridPos;
-		while(snake->isPointOnSnake(gridPos = Point(rand()%gridW, rand()%gridH))
+		while(snake->isPointOnSnake(gridPos = Point(rand()%(gridW - 2) + 1, rand()%(gridH - 2) + 1))
 				|| gridPos == bonus->getGridPosition())
 		{}
 		//log::messageln("bonus at %dx%d (%dx%d)", gridX, gridY, gridX * SIZE, gridY * SIZE);
@@ -55,6 +55,14 @@ void Scene::nextTact(Event* e)
 {
 	if(paused)
 		return;
+	if(mode != MODE_INFINITY)
+	{
+		if(snake->isPointOnSnakeBody(snake->getGridPosition()))
+		{
+			gameOver();
+			return;
+		}
+	}
 	for(auto stone : redstones)
 	{
 		if(stone->getGridPosition() == snake->getGridPosition())
@@ -70,11 +78,11 @@ void Scene::nextTact(Event* e)
 		switch(bonus->getType())
 		{
 			case BONUS_EAT:
-				snake->nextTact(STATUS_EAT);
+				snake->nextTact(STATUS_EAT, duration);
 				splayer.play("bite");
 				break;
 			case BONUS_HALF:
-				snake->nextTact(STATUS_HALF);
+				snake->nextTact(STATUS_HALF, duration);
 				splayer.play("bonus");
 				if(mode == MODE_SURVIVAL)
 				{
@@ -119,19 +127,12 @@ void Scene::nextTact(Event* e)
 	}
 	else
 	{
-		snake->nextTact(STATUS_MOVE);
-		energy--;
+		snake->nextTact(STATUS_MOVE, duration);
+		if(mode != MODE_CLASSIC)
+			energy--;
 	}
 	if(!bonus)
 		genBonus();
-	if(mode != MODE_INFINITY)
-	{
-		if(snake->isPointOnSnakeBody(snake->getGridPosition()))
-		{
-			gameOver();
-			return;
-		}
-	}
 	else if(energy < 0)
 	{
 		gameOver();
@@ -148,7 +149,8 @@ BONUS_TYPE Scene::getRandomBonus()
 {
 	int r = rand() % 100;
 	int R = 100;
-	R = 80;
+	if(mode != MODE_CLASSIC)
+		R = 80;
 	if(r > R)
 		return BONUS_HALF;
 	else
@@ -205,7 +207,7 @@ void Scene::start()
 	}
 	else
 	{
-		splayer.resume();
+		splayer.setVolume(1.0f);
 	}
 	getStage()->addEventListener(KeyEvent::KEY_DOWN, CLOSURE(snake.get(), &Snake::keyPressed));
 	getStage()->addEventListener(TouchEvent::TOUCH_UP, CLOSURE(snake.get(), &Snake::swipe));
@@ -240,6 +242,8 @@ void Scene::gameOver()
 	addChild(gameover);
 	snake->die();
 	removeChild(bonus);
+	for(auto stone : redstones)
+		removeChild(stone);
 	spSoundInstance s = splayer.play("gameover");
 	s->setDoneCallback(CLOSURE(this, &Scene::setGameoverCallbacks));
 }
@@ -264,7 +268,7 @@ void Scene::anyKey(Event* e)
 
 void Scene::pause()
 {
-	splayer.setVolume(0.5f);
+	splayer.setVolume(0.3f);
 	addChild(pauseText);
 	paused = true;
 	getStage()->removeEventListener(KeyEvent::KEY_DOWN, CLOSURE(snake.get(), &Snake::keyPressed));

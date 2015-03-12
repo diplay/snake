@@ -11,13 +11,11 @@ private:
 	spMenu menu;
 	spScene scene;
 	spSoundInstance menuMusic;
+	spSprite soundToggle;
 	std::map<std::string, int> highscores;
 	std::map<std::string, int> settings;
-public:
-	Game();
-	~Game();
-	int getHighScore(GAME_MODE mode);
-	void showMenu();
+	bool soundStatus;
+
 	void backButton(Event* e);
 	void onNewGame(Event* e);
 	void onNewGameSurvival(Event* e);
@@ -25,4 +23,11 @@ public:
 	void onMenuFadeOut(Event* e);
 	void onGameOver(Event* e);
 	void onExit(Event* e);
+	void onSoundToggle(Event* e);
+public:
+	Game();
+	~Game();
+	int getHighScore(GAME_MODE mode);
+	bool getSoundStatus();
+	void showMenu();
 };

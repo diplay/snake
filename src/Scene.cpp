@@ -207,7 +207,8 @@ void Scene::start()
 	}
 	else
 	{
-		splayer.setVolume(1.0f);
+		if(g->getSoundStatus())
+			splayer.setVolume(1.0f);
 	}
 	getStage()->addEventListener(KeyEvent::KEY_DOWN, CLOSURE(snake.get(), &Snake::keyPressed));
 	getStage()->addEventListener(TouchEvent::TOUCH_UP, CLOSURE(snake.get(), &Snake::swipe));
@@ -268,7 +269,8 @@ void Scene::anyKey(Event* e)
 
 void Scene::pause()
 {
-	splayer.setVolume(0.3f);
+	if(g->getSoundStatus())
+		splayer.setVolume(0.3f);
 	addChild(pauseText);
 	paused = true;
 	getStage()->removeEventListener(KeyEvent::KEY_DOWN, CLOSURE(snake.get(), &Snake::keyPressed));
@@ -292,7 +294,8 @@ void Scene::backButton(Event* e)
 		if(paused)
 		{
 			snake->removeAllEventListeners();
-			splayer.setVolume(1.0f);
+			if(g->getSoundStatus())
+				splayer.setVolume(1.0f);
 			music->stop();
 			GameOverEvent ev(0, mode);
 			dispatchEvent(&ev);

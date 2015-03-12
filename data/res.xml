@@ -1,14 +1,20 @@
 <?xml version="1.0"?>
 <resources>
-	<set path = "fonts" />
-	<font file="invaders.fnt" />
+  <set path = "fonts" />
+  <font file="invaders.fnt" />
 
-	<set path = "sounds" />
-	<sound file="bite.ogg" />
+  <set path = "sounds" />
+  <sound file="bite.ogg" />
   <sound file="Latin Industries.ogg" streaming="true" id="infinity" />
   <sound file="Kick Shock.ogg" streaming="true" id="survival" />
-	<sound file="Go Cart - Loop Mix.ogg" streaming="true" id="classic" />
-	<sound file="8bit Dungeon Boss.ogg" streaming="true" id="menu" />
-	<sound file="bonus.ogg" />
-	<sound file="gameover.ogg" />
+  <sound file="Go Cart - Loop Mix.ogg" streaming="true" id="classic" />
+  <sound file="8bit Dungeon Boss.ogg" streaming="true" id="menu" />
+  <sound file="bonus.ogg" />
+  <sound file="gameover.ogg" />
+
+  <set path = "images" />
+  <atlas>
+    <image file="sound_on.png" />
+    <image file="sound_off.png" />
+  </atlas>
 </resources>

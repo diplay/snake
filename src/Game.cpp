@@ -2,41 +2,87 @@
 #include <sstream>
 
 extern SoundPlayer splayer;
+extern Resources resources;
+
+void loadFile(std::map<std::string, int>& data, std::string filename)
+{
+	file::handle h = file::open(filename.c_str(), "rb");
+	char buf[256] = {0};
+	std::string setting;
+	int value;
+	file::read(h, buf, sizeof(buf));
+	file::close(h);
+	stringstream ss;
+	ss << buf;
+	while(ss >> setting >> value)
+	{
+		data[setting] = value;
+		log::messageln("read %s: %d", setting.c_str(), value);
+	}
+}
+
+void saveFile(std::map<std::string, int>& data, std::string filename)
+{
+	char buf[256];
+	buf[0] = 0;
+	for(auto it : data)
+	{
+		sprintf(&buf[strlen(buf)], "%s %d\n", it.first.c_str(), it.second);
+	}
+	file::handle h = file::open(filename.c_str(), "wb");
+	log::messageln("writing into %s: %s", filename.c_str(), buf);
+	file::write(h, buf, strlen(buf));
+	file::close(h);
+}
 
 Game::Game()
 {
+	loadFile(highscores, "scores");
+	loadFile(settings, "settings");
+	soundStatus = (bool)settings["sound"];
 	menu = new Menu();
 	menu->setPosition(getStage()->getSize() / 2);
 	menu->addItem("Infinity Mode", CLOSURE(this, &Game::onNewGame));
 	menu->addItem("Survival Mode", CLOSURE(this, &Game::onNewGameSurvival));
 	menu->addItem("Classic Mode", CLOSURE(this, &Game::onNewGameClassic));
+	std::string soundStatusResAnim;
+	if(soundStatus)
+		soundStatusResAnim = "sound_on";
+	else
+		soundStatusResAnim = "sound_off";
+	soundToggle = new Sprite();
+	soundToggle->setResAnim(resources.getResAnim(soundStatusResAnim));
+	soundToggle->setScale(0.5f);
+	soundToggle->attachTo(menu);
+	soundToggle->setPosition(getStage()->getSize() / 2 * (-1));
+	soundToggle->addEventListener(TouchEvent::TOUCH_UP, CLOSURE(this, &Game::onSoundToggle));
 	//menu->addItem("Exit", CLOSURE(this, &Game::onExit));
-	file::handle h = file::open("scores", "rb");
-	char buf[256];
-	std::string mode;
-	int score;
-	file::read(h, buf, sizeof(buf));
-	file::close(h);
-	stringstream ss;
-	ss << buf;
-	for(int i = 0; i < 3; i++)
-	{
-		ss >> mode >> score;
-		highscores[mode] = score;
-	}
 	getStage()->addEventListener(KeyEvent::KEY_UP, CLOSURE(this, &Game::backButton));
 }
 
 Game::~Game()
 {
-	char buf[256] = {0};
-	for(auto it : highscores)
+	saveFile(settings, "settings");
+	saveFile(highscores, "scores");
+}
+
+void Game::onSoundToggle(Event* e)
+{
+	soundStatus = !soundStatus;
+	std::string soundStatusResAnim;
+	if(soundStatus)
 	{
-		sprintf(&buf[strlen(buf)], "%s %d\n", it.first.c_str(), it.second);
+		splayer.setVolume(1.0f);
+		soundStatusResAnim = "sound_on";
+		settings["sound"] = 1;
 	}
-	file::handle h = file::open("scores", "wb");
-	file::write(h, buf, strlen(buf));
-	file::close(h);
+	else
+	{
+		splayer.setVolume(0.0f);
+		settings["sound"] = 0;
+		soundStatusResAnim = "sound_off";
+	}
+	soundToggle->setResAnim(resources.getResAnim(soundStatusResAnim));
 }
 
 int Game::getHighScore(GAME_MODE mode)
@@ -53,6 +99,11 @@ int Game::getHighScore(GAME_MODE mode)
 		return highscores["classic"];
 		break;
 	}
+}
+
+bool Game::getSoundStatus()
+{
+	return soundStatus;
 }
 
 void Game::backButton(Event* e)

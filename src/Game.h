@@ -8,10 +8,10 @@ using namespace oxygine;
 class Game
 {
 private:
-	spMenu menu;
+	spMenu menu, scoreboard;
 	spScene scene;
 	spSoundInstance menuMusic;
-	spSprite soundToggle;
+	spSprite soundToggle, highscoresToggle;
 	std::map<std::string, int> highscores;
 	std::map<std::string, int> settings;
 	bool soundStatus;
@@ -24,6 +24,10 @@ private:
 	void onGameOver(Event* e);
 	void onExit(Event* e);
 	void onSoundToggle(Event* e);
+	void onHighscoresToggle(Event* e);
+	void prepareScene(GAME_MODE mode);
+	void showScoreboard();
+	void hideScoreboard();
 public:
 	Game();
 	~Game();

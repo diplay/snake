@@ -10,7 +10,7 @@ Menu::Menu()
 	style.hAlign = TextStyle::HALIGN_CENTER;
 }
 
-void Menu::addItem(std::string text, EventCallback onClick)
+void Menu::addItem(std::string text)
 {
 	spTextField item = new TextField();
 	int position = 0;
@@ -23,6 +23,11 @@ void Menu::addItem(std::string text, EventCallback onClick)
 	item->setPosition(0, position);
 	item->setText(text);
 	item->setStyle(style);
-	item->addEventListener(TouchEvent::CLICK, onClick);
 	items.push_back(item);
+}
+
+void Menu::addItem(std::string text, EventCallback onClick)
+{
+	addItem(text);
+	items.back()->addEventListener(TouchEvent::CLICK, onClick);
 }

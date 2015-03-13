@@ -16,5 +16,6 @@
   <atlas>
     <image file="sound_on.png" />
     <image file="sound_off.png" />
+    <image file="icon_highscore.png" />
   </atlas>
 </resources>

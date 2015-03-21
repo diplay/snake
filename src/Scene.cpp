@@ -99,7 +99,7 @@ void Scene::nextTact(Event* e)
 						speedup->setStyle(style);
 						speedup->addTween(TweenAlpha(0), DURATION * 10)->setDetachActor(true);
 						speedup->addTween(Actor::TweenY(speedup->getY() - SIZE*2), DURATION * 10, 1, false, 0, Tween::ease_outExpo);
-						duration -= 2;
+						duration -= 5;
 						energy += 5;
 					}
 				}

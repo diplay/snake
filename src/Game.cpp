@@ -101,13 +101,13 @@ void Game::showScoreboard()
 	scoreboard->addItem(score);
 	getStage()->addChild(scoreboard);
 	scoreboard->setAlpha(0);
-	scoreboard->addTween(Actor::TweenAlpha(255), 1000, 1, false, 0, Tween::ease_inExpo);
-	scoreboard->addTween(Actor::TweenX(scoreboard->getX() + 200), 1000);
+	scoreboard->addTween(Actor::TweenAlpha(255), 1000, 1, false, 0, Tween::ease_outInQuad);
+	scoreboard->addTween(Actor::TweenX(scoreboard->getX() + 200), 1000, 1, false, 0, Tween::ease_outQuad);
 }
 
 void Game::hideScoreboard()
 {
-	scoreboard->addTween(Actor::TweenAlpha(0), 1000)->setDetachActor(true);
+	scoreboard->addTween(Actor::TweenAlpha(0), 500)->setDetachActor(true);
 	scoreboard = NULL;
 }
 

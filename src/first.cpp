@@ -29,7 +29,7 @@ void init()
 	splayer.setVolume(0.5);
 
 	resources.loadXML("res.xml");
-	float fontScale = 25 / getStage()->getHeight() * resources.getResFont("invaders")->getFont()->getSize();
+	float fontScale = 30 / getStage()->getHeight() * resources.getResFont("invaders")->getFont()->getSize();
 	resources.getResFont("invaders")->getFont()->setScale(fontScale);
 
 	for (int i = 0; i < resources.getCount(); ++i)

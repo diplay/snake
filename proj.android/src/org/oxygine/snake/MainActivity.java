@@ -10,6 +10,7 @@ public class MainActivity extends OxygineActivity
 {
 	private InterstitialAd mAd;
 	private AdRequest.Builder adRequestBuilder;
+	private boolean noAds;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +19,12 @@ public class MainActivity extends OxygineActivity
 	}
 
 	private void createAd() {
+		if(R.string.banner_ad_unit_id == "ca-app-pub-xxxxxxxxxxxxxxxxxxxxxxxxxxx") {
+			noAds = true;
+			return;
+		} else {
+			noAds = false;
+		}
 		Log.v("Snake", "Called createAd()");
 		mAd = new InterstitialAd(this);
 		mAd.setAdUnitId(getString(R.string.banner_ad_unit_id));
@@ -55,6 +62,8 @@ public class MainActivity extends OxygineActivity
 	}
 
 	private void loadAd() {
+		if (noAds)
+			return;
 		runOnUiThread(new Runnable() {
 			public void run() {
 				mAd.loadAd(adRequestBuilder.build());
@@ -64,6 +73,8 @@ public class MainActivity extends OxygineActivity
 	}
 
 	public void showAd() {
+		if (noAds)
+			return;
 		runOnUiThread(new Runnable() {
 			public void run() {
 				Log.v("Snake", "showing ad");

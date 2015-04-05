@@ -24,7 +24,7 @@ int mainloop()
 	
 	if (core::beginRendering())
 	{		
-		Color clearColor(16, 16, 16, 255);
+		Color clearColor(0, 0, 0, 255);
 		Rect viewport(Point(0, 0), core::getDisplaySize());
 		//render all actors. Actor::render would be called also for all children
 		getStage()->render(clearColor, viewport);
@@ -50,8 +50,8 @@ void run()
 
 #if OXYGINE_SDL || OXYGINE_EMSCRIPTEN
 	//we could setup initial window size on SDL builds
-	desc.w = 960;
-	desc.h = 640;
+	desc.w = 800;
+	desc.h = 480;
 	//marmalade settings could be changed from emulator's menu
 #endif
 

@@ -1,4 +1,5 @@
 #include "Game.h"
+#include "Ads.h"
 #include <sstream>
 
 extern SoundPlayer splayer;
@@ -61,11 +62,12 @@ Game::Game()
 	}
 	soundToggle = new Sprite();
 	soundToggle->setResAnim(resources.getResAnim(soundStatusResAnim));
-	soundToggle->setScale(0.75f);
+	float toggleScale = getStage()->getWidth() / 10.0f / soundToggle->getWidth();
+	soundToggle->setScale(toggleScale);
 	soundToggle->addEventListener(TouchEvent::CLICK, CLOSURE(this, &Game::onSoundToggle));
 	highscoresToggle = new Sprite();
 	highscoresToggle->setResAnim(resources.getResAnim("icon_highscore"));
-	highscoresToggle->setScale(0.75f);
+	highscoresToggle->setScale(toggleScale);
 	Vector2 pos(getStage()->getWidth(), 0);
 	pos.x -= highscoresToggle->getWidth() * highscoresToggle->getScaleX();
 	highscoresToggle->setPosition(pos);
@@ -199,6 +201,7 @@ void Game::prepareScene(GAME_MODE mode)
 	highscoresToggle->addTween(Actor::TweenAlpha(0), 1000);
 	t->addDoneCallback(CLOSURE(this, &Game::onMenuFadeOut));
 	scene = new Scene(mode);
+	loadAd();
 }
 
 void Game::onNewGameClassic(Event* e)
@@ -222,6 +225,7 @@ void Game::onMenuFadeOut(Event* e)
 	getStage()->removeChild(highscoresToggle);
 	scene->addEventListener(GameOverEvent::EVENT, CLOSURE(this, &Game::onGameOver));
 	getStage()->addChild(scene);
+	scene->setPosition(CORRECTION);
 	scene->start();
 }
 
@@ -251,6 +255,7 @@ void Game::onGameOver(Event* e)
 		log::messageln("%s: %d", it.first.c_str(), it.second);
 	}
 	getStage()->removeChild(scene);
+	showAd();
 	showMenu();
 	scene = NULL;
 }

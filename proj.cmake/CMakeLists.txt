@@ -3,7 +3,7 @@ project (snake)
 
 set(SRCFILES ../src/first.cpp ../src/entry_point.cpp ../src/Snake.cpp
 	../src/Bonus.cpp ../src/Scoreboard.cpp ../src/Menu.cpp
-	../src/Scene.cpp ../src/Game.cpp)
+	../src/Scene.cpp ../src/Game.cpp ../src/Ads.cpp)
 
 add_subdirectory(../../oxygine-framework/ oxygine-framework)
 add_definitions(${OXYGINE_DEFINITIONS})

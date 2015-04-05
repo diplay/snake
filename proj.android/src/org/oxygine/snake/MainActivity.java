@@ -19,7 +19,7 @@ public class MainActivity extends OxygineActivity
 	}
 
 	private void createAd() {
-		if(R.string.banner_ad_unit_id == "ca-app-pub-xxxxxxxxxxxxxxxxxxxxxxxxxxx") {
+		if(getString(R.string.banner_ad_unit_id).equals("ca-app-pub-xxxxxxxxxxxxxxxxxxxxxxxxxxx")) {
 			noAds = true;
 			return;
 		} else {

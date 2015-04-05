@@ -247,6 +247,7 @@ void Scene::gameOver()
 		removeChild(stone);
 	spSoundInstance s = splayer.play("gameover");
 	s->setDoneCallback(CLOSURE(this, &Scene::setGameoverCallbacks));
+	getStage()->removeEventListener(KeyEvent::KEY_UP, CLOSURE(this, &Scene::backButton));
 }
 
 void Scene::setGameoverCallbacks(Event* e)
